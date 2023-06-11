@@ -6,3 +6,5 @@ psycopg2-binary==2.9.6
 httpx==0.24.1
 pytest==7.3.1
 python-dotenv==1.0.0
+python-multipart==0.0.6
+pydub==0.25.1
