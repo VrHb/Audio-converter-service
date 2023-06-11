@@ -49,7 +49,7 @@ def convert_file(audiofile: UploadFile) -> str:
 def get_user_song(song_id: int, user_id: int, db: Session = Depends(get_db)) -> FileResponse:
     song = get_song(db=db, song_id=song_id, user_id=user_id)
     if not song:
-        return "w"
+        raise HTTPException(status_code=404, detail="Song not found!")
     return FileResponse(song.file_path)
 
 
@@ -70,9 +70,9 @@ def add_user(user: UserBase, db: Session = Depends(get_db)) -> User:
 def convert_audio(user_uuid: str, user_token: str, audiofile: UploadFile, db: Session = Depends(get_db), request: Request = None) -> AnyUrl | str:
     user_from_db = get_user(db=db, uuid=user_uuid, token=user_token)
     if not user_from_db:
-        return "No user!"
+        raise HTTPException(status_code=404, detail="User not found!")
     if audiofile.content_type != "audio/wav":
-        return "Wrong file format!"
+        raise HTTPException(status_code=404, detail="Wrong file format!")
     song_uuid = uuid.uuid5(uuid.NAMESPACE_URL, name=(audiofile.filename + user_uuid))
     file_path = convert_file(audiofile)
     song = Song(
