@@ -4,6 +4,11 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
+class Song(BaseModel):
+    uuid: UUID
+    file_path: str
+    user_id: int 
+
 class UserBase(BaseModel):
     username: str
 
@@ -13,7 +18,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     uuid: UUID | int 
     token: str
-    created_at: datetime
+    songs: list[Song] = []
 
     class config:
         orm_mode = True
